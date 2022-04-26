@@ -5,6 +5,9 @@ Dette er en repository fra emnet Webprogramering der som gikk ut på å bygge we
 Servicen kjører dermed på heroku med URL-en: (ikke oppe på heroku ennå)
 
 For nå ligger de obligatoriske oppgavene på heroku NB! disse bygger på hverandre:
+<br>
 https://oblig-1-khalidaf.herokuapp.com/
+<br>
 https://oblig-2-khalidaf.herokuapp.com/
+<br>
 https://oblig-3-khalidaf.herokuapp.com/
