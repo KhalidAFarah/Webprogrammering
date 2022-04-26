@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>REST & JQuery</title>
+    <script src="//code.jquery.com/jquery-3.4.1.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+
+</head>
+<body>
+<form>
+    <div class="form-group">
+        <label>Skriv inn navnet:</label>
+        <input type="text" id="navn"/>
+        <label id="navn-error"></label>
+    </div>
+    <div class="form-group">
+        <label>Skriv inn adresse:</label>
+        <input type="text" id="adresse"/>
+        <label id="adresse-error"></label>
+    </div>
+
+</form>
+
+<button onclick="leggTilKunde()">Legg til person</button>
+<div id="utskrift"></div>
+<button onclick="HentData()">Hent data</button>
+<br/>
+<div id="hallo" ></div>
+<br/>
+<button onclick="navn()">Navn</button>
+<div id="res"></div>
+<script type="application/javascript">
+    function HentData(){
+
+
+
+        $.get("http://localhost:8080/demo/kunder/", function (data) {
+            console.log(data)
+            let ut = ""
+            for(let kunde of data){
+                ut +="<br/>Navn: " + kunde.navn + "<br/>Adresse: "+kunde.adresse
+            }
+            $("#hallo").html($("#hallo").html()+ut);
+        });
+
+
+    }
+
+    function valider(navn, adresse){
+        const regexp_navn = /^[A-ZØÆÅa-zøæå]{2,30}$/;
+        const regexp_adresse = /^[0-9a-zA-ZæøåÆØÅ .\-]{2,50}$/
+
+        let valid = true;
+
+        if(!regexp_navn.test(navn)){
+            $("#navn-error").html("Navn må ha mellom 2 til 30 bokstaver!")
+            valid = false;
+        }else{
+            $("#navn-error").html("")
+        }
+
+        if(!regexp_adresse.test(adresse)){
+            $("#adresse-error").html("Ugyldgi epost adresse!")
+            valid = false;
+        }else{
+            $("#adresse-error").html("")
+        }
+
+        return valid;
+    }
+
+    function leggTilKunde(){
+        const navn = $("#navn").val();
+        const adresse = $("#adresse").val()
+        if(valider(navn, adresse)){
+            const kunde = {
+                navn: navn,
+                adresse: adresse
+            }
+
+            $.post("http://localhost:8080/demo/kunder/", kunde, function (data) {
+                $("#utskrift").html("<br/>Navn: " + data.navn + "<br/>Adresse: "+data.adresse);
+            });
+        }
+    }
+
+    function navn(){
+        $.get("http://localhost:8080/demo/navn/?navn="+$("#navn").val(), function (data) {
+           $("#res").html(data);
+       });
+
+    }
+
+
+</script>
+
+</body>
+</html>

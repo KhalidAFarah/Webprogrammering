@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>REST & JQuery</title>
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h2>Oppgave 1</h2>
+Skriv inn en måned for å få den gjennomsnittlige temperaturen <input type="text" id="maned"/>
+<button onclick="hentTemp()">Hent temperatur</button>
+
+<br/>
+<br/>
+<h2>Oppgave 2</h2>
+Skriv inn valutasort <input type="text" id="sort"/>
+Skriv inn valutakurs/belopet <input type="number" id="kurs"/>
+<br/>
+<button onclick="registrerValuta()">Registrer valuta</button>
+<button onclick="sjekkValuta()">Sjekk kursen valuta</button>
+
+<br/>
+<br/>
+<h2>Oppgave 3</h2>
+<input type="number" id="x" placeholder="x"/>
+<input type="number" id="y" placeholder="y"/>
+<br/>
+<button id="plus">+</button>
+<button id="minus">-</button>
+<button id="multi">*</button>
+<button id="dele">/</button>
+<div id="res"></div>
+
+
+
+<script type="application/javascript">
+    function hentTemp(){
+        $.get("/uke5/?maned="+$("#maned").val().toLowerCase(), function (data) {
+            alert("temperaturen er " + data);
+        });
+    }
+    function registrerValuta(){
+        const valuta = {
+            valutaSort:$("#sort").val(),
+            valutaKurs:$("#kurs").val(),
+        }
+        $.post("/uke5/valuta/", valuta, function (data){
+            console.log(data)
+        });
+    }
+    function sjekkValuta(){
+        const valuta = {
+            valutaSort:$("#sort").val(),
+            valutaKurs:$("#kurs").val(),
+        }
+        $.get("/uke5/valuta/", valuta, function (data) {
+            alert(data)
+        });
+    }
+
+    $("#plus").click(function () {
+        const x = Number($("#x").val());
+        const y = Number($("#y").val());
+        console.log(isNaN(x))
+        console.log(isNaN(y))
+        if(!isNaN(x) || !isNaN(y)){
+            $.get("/uke5/calc/plus/?x="+x+"&y="+y, function (res){
+                $("#res").html("<h3>" + res + "</h3>");
+            })
+        }else{
+            alert("Vennligst oppgi gyldig informasjon for x og y!");
+        }
+    });
+    $("#minus").click(function () {
+        const x = Number($("#x").val());
+        const y = Number($("#y").val());
+        if(!isNaN(x) || !isNaN(y)){
+            $.get("/uke5/calc/minus/?x="+x+"&y="+y, function (res){
+                $("#res").html("<h3>" + res + "</h3>");
+            })
+        }else{
+            alert("Vennligst oppgi gyldig informasjon for x og y!");
+        }
+    });
+    $("#multi").click(function () {
+        const x = Number($("#x").val());
+        const y = Number($("#y").val());
+        if(!isNaN(x) || !isNaN(y)){
+            $.get("/uke5/calc/multi/?x="+x+"&y="+y, function (res){
+                $("#res").html("<h3>" + res + "</h3>");
+            })
+        }else{
+            alert("Vennligst oppgi gyldig informasjon for x og y!");
+        }
+    });
+    $("#dele").click(function () {
+        const x = Number($("#x").val());
+        const y = Number($("#y").val());
+        if(!isNaN(x) || !isNaN(y)){
+            $.get("/uke5/calc/dele/?x="+x+"&y="+y, function (res){
+                $("#res").html("<h3>" + res + "</h3>");
+            })
+        }else{
+            alert("Vennligst oppgi gyldig informasjon for x og y!");
+        }
+    });
+</script>
+</body>
+</html>

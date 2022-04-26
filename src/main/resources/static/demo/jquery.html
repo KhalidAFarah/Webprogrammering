@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery</title>
+    <!--jquery paa egen server-->
+    <!--script src="jquery-3.4.1.js"></script-->
+    <script src="//code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            console.log("Inne i ready function");
+
+            $("#div1").click(function(){
+                $("#div1").css("background-color","pink");
+            });
+
+            $("#inn").change(function(){
+                $("button").css("background-color","red");
+                $("#div1").html("Feltet over er endret");
+            });
+
+            $("#knapp1").click(function(){
+                $("button").css("background-color","");
+                //let temp = $("input[name=inn]").val();
+                let temp = $("#inn").val();
+                $("#ut").val(temp);
+                $("#div1").html(temp);
+                // alternativt nedenfor i "plain" javascript
+                //let temp = document.skjema.inn.value;
+                //document.skjema.ut.value = temp;
+            });
+
+            function forsvinn(){
+                $("#knapp2").hide();
+            }
+
+            $("#knapp2").click(function(){
+                forsvinn();
+                // $("#knapp2").hide();
+                // alternativt nedenfor i "plain" javascript
+                // document.getElementById("knapp2").style.display="none";
+            });
+
+            $("#knapp3").click(function(){
+                $("#knapp2").show();
+                // alternativt nedenfor i "plain" javascript
+                // document.getElementById("knapp2").style.display="inline";
+            });
+            $("#knapp4").click(function(){
+                $("#boks").fadeIn(1000);
+            });
+            $("#knapp5").click(function(){
+                $("#boks").fadeOut(3000);
+            });
+            $("#knapp6").click(function(){
+                $("#boks").animate({
+                    left:'100px',
+                    opacity:'0.5',
+                    height:'200px',
+                    width:'200px',
+                    //fontSize:'100px'
+                });
+                $("#boks").animate({ //en ekstra animasjon som hender etter den andre
+                    fontSize:'100px'
+                });
+            });
+
+        });
+    </script>
+</head>
+<body>
+<form action="javascript:void(0);" name="skjema">
+    <input type="text" name="inn" id="inn"/><br/>
+    <input type="text" name="ut" id="ut"/><br/>
+    <button id="knapp1">Trykk meg</button>
+</form>
+
+<div id="div1">Trykk for fargeskift!</div>
+<button id="knapp2">Forsvinn</button>
+<button id="knapp3">Tilbake</button>
+
+<!--animasjoner-->
+<button id="knapp4">Inn</button>
+<button id="knapp5">Ut</button>
+<button id="knapp6">Animasjon</button>
+<div id="boks" style="width:80px; height:80px;
+             background-color:red; position:absolute">Hei</div>
+</body>
+</html>

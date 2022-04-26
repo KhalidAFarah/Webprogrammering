@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rekursjon</title>
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container-fluid" style="margin: 1rem">
+    <div class="row">
+        <h2>Fakulteten</h2>
+        <input type="text" class="input" id="fakultet-input"/>
+        <button onclick="fakultet()" class="btn btn-primary">Regn ut</button>
+    </div>
+
+    <div class="row">
+        <h2>Summasjonen (rekursiv)</h2>
+        <input type="text" class="input" id="rekursivsummasjon-input"/>
+        <button onclick="rekursivsummasjon()" class="btn btn-primary">Regn ut</button>
+    </div>
+
+    <div class="row">
+        <h2>Summasjonen (iterativ)</h2>
+        <input type="text" class="input" id="iterativsummasjon-input"/>
+        <button onclick="iterativsummasjon()" class="btn btn-primary">Regn ut</button>
+    </div>
+</div>
+
+
+</body>
+
+<script type="application/javascript">
+    function fakultet(){
+        $.get("/api/uke9/fakultet/?n="+$("#fakultet-input").val(), function (data){
+            alert(data)
+        });
+    }
+    function rekursivsummasjon(){
+        $.get("/api/uke9/rekursivsummasjon/?n="+$("#rekursivsummasjon-input").val(), function (data){
+            alert(data)
+        });
+    }
+    function iterativsummasjon(){
+        $.get("/api/uke9/iterativsummasjon/?n="+$("#iterativsummasjon-input").val(), function (data){
+            alert(data)
+        });
+    }
+</script>
+</html>

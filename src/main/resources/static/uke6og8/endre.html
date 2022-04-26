@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Endre motorvogn</title>
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <script src="/uke6og8/validering.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/uke6og8/index.html/">Motorvogner</a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/uke6og8/index.html/">Vis alle motovogner</a></li>
+                <li><a href="/uke6og8/registrere.html/">Registrere motorvogner</a></li>
+                <li><a href="/uke6og8/login.html/">Login</a></li>
+                <li><a onclick="logut()">Logut</a></li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <h1>Rediger en motorvogn</h1>
+    </div>
+    <div class="row">
+        <form class="form" onsubmit="return false;">
+            <div class="form-group">
+                <label>Eiers personnummer</label>
+                <input type="text" class="form-control" id="eierspersonnummer" />
+                <label style="color: red;" id="eierspersonnummer-error"></label>
+            </div>
+
+            <div class="form-group">
+                <label>Eiers navn</label>
+                <input type="text" class="form-control" id="eiersnavn"/>
+                <label style="color: red;" id="eiersnavn-error"></label>
+            </div>
+
+            <div class="form-group">
+                <label>Eiers adresse</label>
+                <input type="text" class="form-control" id="eiersadresse"/>
+                <label style="color: red;" id="eiersadresse-error"></label>
+            </div>
+
+            <div class="form-group">
+                <label>Kjennetegn</label>
+                <input type="text" class="form-control" id="kjennetegn" />
+                <label style="color: red;" id="kjennetegn-error"></label>
+            </div>
+
+            <div class="form-group">
+                <label>Bilmerke</label>
+                <select type="text" class="form-control" id="bilmerke" onchange="velgType(this.value)"></select>
+                <label style="color: red;" id="bilmerke-error"></label>
+            </div>
+
+            <div id="field-type" class="form-group">
+                <label>Biltype</label>
+                <input type="text" class="form-control" id="biltype"/>
+                <label style="color: red;" id="biltype-error"></label>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-primary" onclick="lagre()">Lagre</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="row" style="margin-top: 1rem;" id="response"></div>
+</div>
+
+<script>
+    const id = new URLSearchParams(window.location.search).get('id');
+    $(function (){
+        $.get("/api/uke8/merker/", function (data){
+            let ut = "<option value=''>Velg en merke</option>";
+            $.each(data, function (index, elem){
+                ut += "<option value='"+elem+"'>" + elem + "</option>";
+            });
+            $("#bilmerke").html(ut)
+
+
+        })
+
+        $.get("/api/uke14/motorvogner/"+id+"/", function (motorvogndata){
+            if(motorvogndata == ""){
+                window.location.href = "/uke6og8/index.html/";
+            }
+
+            $.get("/api/uke8/merker/" + motorvogndata.bilmerke + "/", function (data){
+                let ut = "<option value=''>Velg en type</option>";
+                for (let valg of data){
+                    ut += "<option value='"+valg+"'>" + valg + "</option>"
+                }
+                $("#field-type").html("<label>Biltype</label><select class='form-control' id='biltype'>"+ut+"</select><label style='color: red;' id='biltype-error'></label>")
+                $("#biltype").val(motorvogndata.biltype)
+            });
+
+
+            $("#eierspersonnummer").val(motorvogndata.personnummer)
+            $("#eiersnavn").val(motorvogndata.navn)
+            $("#eiersadresse").val(motorvogndata.adresse)
+
+            $("#kjennetegn").val(motorvogndata.kjennetegn)
+            $("#bilmerke").val(motorvogndata.bilmerke)
+        })
+
+
+    });
+
+    function lagre(){
+        const eierspersonnummer = $("#eierspersonnummer").val();
+        const eiersnavn = $("#eiersnavn").val();
+        const eiersadresse = $("#eiersadresse").val();
+        const kjennetegn = $("#kjennetegn").val();
+        const bilmerke = $("#bilmerke").val();
+        const biltype = $("#biltype").val();
+
+        if(motorvognValidering(eierspersonnummer, eiersnavn, eiersadresse, kjennetegn, bilmerke, biltype)) {
+            motorvognTommmeErrorFelter();
+            const motorvogn = {
+                personnummer: eierspersonnummer,
+                navn: eiersnavn,
+                adresse: eiersadresse,
+                kjennetegn: kjennetegn,
+                bilmerke: bilmerke,
+                biltype: biltype,
+            }
+            $.ajax({
+                url: "/api/uke14/motorvogner/" + id + "/",
+                type: "PUT",
+                dataType: "json",
+                data: motorvogn,
+                success: function (data) {
+                    $("#response").html("<div class='alert alert-success'><label>Oppdaterte motorvognen</label></div>");
+                },
+                error: function (jqxhr, textstatus, errorthrown) {
+                    $("#response").html("<div class='alert alert-danger'><label>" + jqxhr.responseJSON.message + "</label></div>");
+                }
+            })
+        }
+    }
+
+    function velgType(type){
+        $.get("/api/uke8/merker/" + type + "/", function (data){
+            let ut = "<option>Velg en type</option>";
+            for (let valg of data){
+                ut += "<option>" + valg + "</option>"
+            }
+            $("#field-type").html("<label>Biltype</label><select class='form-control' id='biltype'>"+ut+"</<select>")
+        });
+    }
+
+    function logut(){
+        $.get("/api/uke15/motorvogn/logut/").done(function (jqxhr){
+            $("#response").html("<div class='alert alert-success'><label>"+jqxhr.message+"</label></div>");
+        }).fail(function (jqxhr){
+            $("#response").html("<div class='alert alert-danger'><label>"+jqxhr.responseJSON.message+"</label></div>");
+        });
+    }
+</script>
+</body>
+</html>

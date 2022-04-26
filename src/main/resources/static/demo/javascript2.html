@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Javascript 2</title>
+</head>
+<body>
+
+<script type="application/javascript">
+    const personer = [];
+    const person1 = {
+        navn:"Morten Jensen",
+        adresse: "Drammensveien 1",
+    };
+    const person2 = {
+        navn:"Line Hansen",
+        adresse: "Osloveien 43",
+    };
+
+    personer.push(person1);
+    personer.push(person2);
+
+    for(let i = 0; i < personer.length; i++){
+        console.log(i + " : " + personer[i].navn + " " + personer[i].adresse);
+    }
+    for(let i in personer){
+        console.log(i + " : " + personer[i].navn + " " + personer[i].adresse);
+    }
+    for(let i of personer){
+        console.log(i.navn + " " + i.adresse);
+    }
+
+    let i = 0;
+    while(i < personer.length){
+        console.log(i + " : " + personer[i].navn + " " + personer[i].adresse);
+        i++;
+    }
+</script>
+
+</body>
+</html>

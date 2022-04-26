@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+</head>
+<body>
+
+    <form class="container" onsubmit="return false">
+        <div class="row center" style="margin-top: 20rem">
+            <div class="col-lg-4 col-lg-offset-4">
+                <h1>Login</h1>
+                <div class="form-group">
+                    <span>Brukernavn</span>
+                    <input class="form-control" id="brukernavn" type="text"/>
+                    <span id="brukernavn-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <span>Passord</span>
+                    <input class="form-control" id="passord" type="password"/>
+                    <span id="passord-error"></span>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <button class="btn btn-block btn-primary" onclick="login()">Login</button>
+                    </div>
+                    <div class="col-lg-6">
+                        <button class="btn btn-block btn-primary" onclick="registrer()">Registrer</button>
+                    </div>
+                </div>
+                <div class="row" id="response" style="margin-top: 1rem"></div>
+            </div>
+        </div>
+    </form>
+
+    <script type="application/javascript">
+        /*function validering(brukernavn, passord){
+            regexp_brukernavn = /^[A-Za-z0-9\s]$/
+        }*/
+        function login(){
+            const bruker = {
+                brukernavn: $("#brukernavn").val(),
+                passord: $("#passord").val()
+            }
+
+            $.get("/api/uke15/motorvogn/login/",bruker).done(function (){
+                window.location.href = "/uke6og8/index.html/";
+            }).fail(function (jqxhr, textstatus, errorthrown){
+                $("#response").html("<div class='alert alert-danger'><label>"+jqxhr.responseJSON.message+"</label></div>");
+            });
+        }
+
+        function registrer(){
+            window.location.href = "/uke6og8/registrerbruker.html/";
+        }
+
+
+    </script>
+
+</body>
+</html>

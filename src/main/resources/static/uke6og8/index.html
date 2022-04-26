@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Motorvognregister</title>
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/uke6og8/index.html/">Motorvogner</a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/uke6og8/index.html/">Vis alle motovogner</a></li>
+                <li><a href="/uke6og8/registrere.html/">Registrere motorvogner</a></li>
+                <li><a href="/uke6og8/login.html/">Login</a></li>
+                <li><a onclick="logut()">Logut</a></li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+<div class="container">
+
+
+    <div class="row">
+        <h1>Alle bilene:</h1>
+        <div id="motorvogner">
+            <table class='table table-striped'><tr><th>Personnumer</th><th>Navn</th><th>Adresse</th><th>Kjennetegn</th><th>Merke</th><th>Type</th><th></th><th></th></tr></table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-danger" onclick="tomListe()">Slett alle</button>
+        </div>
+
+    </div>
+
+    <div class="row" id="response" style="margin-top: 1rem"></div>
+
+</div>
+
+
+<script>
+
+    $(function (){
+       $.get("/api/uke6/motorvogner/").done(visMotorvogner).fail(function (jqxhr){
+           $("#response").html("<div class='alert alert-danger'><label>"+jqxhr.responseJSON.message+"</label></div>");
+       });
+    });
+
+
+
+    function slett(id){
+        $.ajax({
+            url:"/api/uke6/motorvogner/"+id+"/",
+            type: "DELETE",
+            success: function (data) {
+                visMotorvogner(data);
+                $("#response").html("<div class='alert alert-success'><label>Motorvognen slettet</label></div>");
+            },
+            error: function (jqxhr, textstatus, errorthrown){
+                $("#response").html("<div class='alert alert-danger'><label>"+jqxhr.responseJSON.message+"</label></div>");
+            }
+        });
+    }
+    function visMotorvogner(motorvogner){
+        let ut = "<table class='table table-striped'><tr><th>Personnumer</th><th>Navn</th><th>Adresse</th><th>Kjennetegn</th><th>Merke</th><th>Type</th><th></th><th></th></tr>";
+        for(let motorvogn of motorvogner){
+            ut += "<tr><td>" + motorvogn.personnummer + "</td><td>" + motorvogn.navn + "</td><td>" + motorvogn.adresse + "</td><td>" + motorvogn.kjennetegn + "</td><td>" + motorvogn.bilmerke + "</td><td>" + motorvogn.biltype + "</td><td><button class='btn btn-primary' onclick='endre("+motorvogn.id+")'>Endre</button></td><td><button class='btn btn-danger' onclick='slett("+motorvogn.id+")'>Slett</button></td></tr>"
+        }
+        ut += "</table>"
+        $("#motorvogner").html(ut);
+    }
+
+    function tomListe(){
+        $.ajax({
+            url:"/api/uke6/motorvogner/",
+            type: "DELETE",
+            success: function (data) {
+                visMotorvogner(data);
+                $("#response").html("<div class='alert alert-success'><label>Slettet alle  motorvogner</label></div>");
+            },
+            error: function (jqxhr, textstatus, errorthrown){
+                $("#response").html("<div class='alert alert-danger'><label>"+jqxhr.responseJSON.message+"</label></div>");
+            }
+        });
+    }
+
+    function endre(id){
+        window.location.href = "/uke6og8/endre.html/?id="+id;
+    }
+
+    function logut(){
+        console.log("sd")
+        $.get("/api/uke15/motorvogn/logut/").done(function (jqxhr){
+            $("#response").html("<div class='alert alert-success'><label>"+jqxhr.message+"</label></div>");
+        }).fail(function (jqxhr){
+            $("#response").html("<div class='alert alert-danger'><label>"+jqxhr.responseJSON.message+"</label></div>");
+        });
+    }
+</script>
+</body>
+</html>

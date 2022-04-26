@@ -1,0 +1,56 @@
+DROP TABLE IF EXISTS Kunde;
+CREATE TABLE Kunde
+(
+    id INTEGER AUTO_INCREMENT NOT NULL,
+    navn VARCHAR(30) NOT NULL,
+    adresse VARCHAR(50) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS Motorvogn;
+CREATE TABLE Motorvogn (
+    id INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    personnummer VARCHAR(20) NOT NULL,
+    navn VARCHAR(30) NOT NULL,
+    adresse VARCHAR(50) NOT NULL,
+    kjennetegn VARCHAR(30) NOT NULL,
+    bilmerke VARCHAR(20) NOT NULL,
+    biltype VARCHAR(10) NOT NULL
+);
+
+DROP TABLE IF EXISTS Bruker;
+CREATE TABLE Bruker (
+    id INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    brukernavn VARCHAR(20) NOT NULL,
+    passord VARCHAR(20) NOT NULL,
+    admin BOOLEAN NOT NULL
+);
+
+/*Eksamen vår 2021*/
+DROP TABLE IF EXISTS KundeP;
+CREATE TABLE KundeP (
+    kid INT (11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    fornavn VARCHAR (50) NOT NULL,
+    etternavn VARCHAR (50) NOT NULL,
+    adresse VARCHAR (50) NOT NULL,
+    postnr VARCHAR (4) NOT NULL,
+    telefonnr VARCHAR (8) NOT NULL,
+    epost VARCHAR (50) NOT NULL
+);
+
+DROP TABLE IF EXISTS Poststed;
+CREATE TABLE Poststed (
+    postnr varchar (4) NOT NULL PRIMARY KEY,
+    poststed varchar (50) NOT NULL
+);
+
+DROP TABLE IF EXISTS Pakke;
+CREATE TABLE Pakke (
+    pid INTEGER AUTO_INCREMENT NOT NULL,
+    kid INTEGER NOT NULL,
+    VOLUM DECIMAL NOT NULL,
+    VEKT DECIMAL NOT NULL,
+
+    PRIMARY KEY (pid),
+    FOREIGN KEY (kid) REFERENCES KundeP (kid)
+);

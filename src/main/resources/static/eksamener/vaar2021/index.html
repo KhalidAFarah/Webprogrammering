@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Eksamen vaar 2021</title>
+    <script src="//code.jquery.com/jquery-3.4.1.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <h3>Registrere pakke</h3>
+    <table>
+        <tr>
+            <td>Fornavn</td>
+            <td><input type='text' id='fornavn'/></td>
+            <td id="fornavn-err"></td>
+        </tr>
+        <tr>
+            <td>Etternavn</td>
+            <td><input type='text' id='etternavn'/></td>
+            <td id="etternavn-err"></td>
+        </tr>
+        <tr>
+            <td>Adresse</td>
+            <td><input type='text' id='adresse'/></td>
+            <td id="adresse-err"></td>
+        </tr>
+        <tr>
+            <td>Postnr</td>
+            <td><input type='text' id='postnr'/></td>
+            <td id="postnr-err"></td>
+        </tr>
+        <tr>
+            <td>Telefonnr</td>
+            <td><input type='text' id='telefonnr'/></td>
+            <td id="telefonnr-err"></td>
+        </tr>
+        <tr>
+            <td>E-post</td>
+            <td><input type='text' id='epost'/></td>
+            <td id="epost-err"></td>
+        </tr>
+        <tr>
+            <td>Pakkevolum (dm^2)</td>
+            <td><input type='text' id='volum'/></td>
+            <td id="volum-err"></td>
+        </tr>
+        <tr>
+            <td>Vekt(kg)</td>
+            <td><input type='text' id='vekt'/></td>
+            <td id="vekt-err"></td>
+        </tr>
+        <tr>
+            <td><input type='submit' id='registrer' value='Registrer'/></td>
+        </tr>
+    </table>
+</body>
+
+<script type="application/javascript">
+    /** Regsitrering av en pakke
+     * for å utføre registrering må brukeren fylle ut feltene og trykke registrer, hvis feltene har ugyldige verdi blir
+     * blir informasjonen ikke sendt til serveren for håndtering.
+     *
+     * må legge til table data felter for å skrive inn feil meldinger til brukeren for relevante feilmeldinger ved
+     * relevante felter.
+     * */
+
+    function validering(fornavn, etternavn, adresse, postnr, telefonnr, epost, volum, vekt){
+        const regexp_navn = /^[A-ZØÆÅa-zøæå]{2,50}$/;
+        const regexp_adresse = /^[A-ZØÆÅa-zøæå0-9,.\s]{2,50}$/;
+        const regexp_postnr = /^[0-9]{4}$/;
+        const regexp_telefonnr = /^[0-9]{8}$/;
+        const regexp_epost = /^[A-ZØÆÅa-zøæå._%+-]+@[A-ZØÆÅa-zøæå._%+-]+\.[A-Za-z]{2,}$/;
+
+        let val = true;
+
+        if(!regexp_navn.test(fornavn)){
+            $("#fornavn-err").html("Ugyldig fornavn, må være mellom 2 og 50 bokstaver!");
+            val = false;
+        }
+
+        if(!regexp_navn.test(etternavn)){
+            $("#etternavn-err").html("Ugyldig etternavn, må være mellom 2 og 50 bokstaver!");
+            val = false;
+        }
+        if(!regexp_adresse.test(adresse)){
+            $("#adresse-err").html("Ugyldig adresse, må være mellom 2 og 50 tegn!");
+            val = false;
+        }
+
+        if(!regexp_postnr.test(postnr) ){
+            $("#postnr-err").html("Ugyldig postnr, må være 4 tall!");
+            val = false;
+        }else{
+            $.ajax({
+                url: "/api/eksamen/var2021/?postnr="+postnr,
+                type: "GET",
+                error: function () {
+                    $("#postnr-err").html("Postnummer eksisterer ikke");
+                    val = false;
+                },
+            });
+        }
+        if(!regexp_telefonnr.test(telefonnr)){
+            $("#telefonnr-err").html("Ugyldyg telefonnummer, må være 8 tall!");
+            val = false;
+        }
+        if(!regexp_epost.test(epost)){
+            $("#epost-err").html("Ugyldig E-post adresse!");
+            val = false;
+        }
+        if(!(volum > 0)){
+            $("#volum-err").html("Volum må være større enn 0!");
+            val = false;
+        }
+        if(!(vekt > 0)){
+            $("#vekt-err").html("Vekt må være større enn 0!");
+            val = false;
+        }
+
+        return val;
+    }
+
+    $("#registrer").click(function () {
+        const fornavn = $("#fornavn").val();
+        const etternavn = $("#etternavn").val();
+        const adresse = $("#adresse").val();
+        const postnr = $("#postnr").val();
+        const telefonnr = $("#telefonnr").val();
+        const epost = $("#epost").val();
+        const volum = $("#volum").val();
+        const vekt = $("#vekt").val();
+
+        if(validering(fornavn, etternavn, adresse, postnr, telefonnr, epost, volum, vekt)){
+            const pakke = {
+                fornavn: fornavn,
+                etternavn: etternavn,
+                adresse: adresse,
+                postnr: postnr,
+                telefonnr: telefonnr,
+                epost: epost,
+                volum: volum,
+                vekt: vekt,
+            }
+
+            $.post("/api/eksamen/var2021/", pakke).done(function (data) {
+                alert("Pakke registrert");
+            }).fail(function (error){
+                alert(error.responseJSON.message)
+            })
+        }else{
+            alert("Valideringsfeil")
+        }
+    })
+</script>
+
+</html>

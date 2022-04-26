@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>Javascript 3</title>
+
+  <script type="application/javascript">
+    function beregnBMI(){
+      const navn = document.getElementById("navn").value;
+      const hoydeS = document.getElementById("hoyde").value;
+      const vektS = document.getElementById("vekt").value;
+      const hoyde = Number(hoydeS);
+      const vekt = Number(vektS);
+      if(isNaN(hoyde) || (isNaN(vekt))){
+        document.getElementById("bmi").innerHTML="<b/>Feil, høyde og vekt må være nummer</b>";
+      }
+      else {
+        const bmi = vekt/(hoyde*hoyde);
+        document.getElementById("bmi").innerText=navn+" har BMI =  "+bmi.toFixed(2);
+      }
+    }
+
+    function beregnValuta(){
+      let valutaArray=["USD",8.66,"EUR",10.49];
+      let utData="";
+      let belop = document.getElementById("verdiID").value;
+      let valuta = document.getElementById("valutaID").value;
+      if(belop<=0)
+      {
+        utData+="Feil, beløpet må være større enn null";
+      }
+      else if(valuta==="USD" || valuta==="EUR")
+      {
+        // beregningen her:
+        let valutaPosisjon = valutaArray.indexOf(valuta);
+        let valutaVerdi = valutaArray[valutaPosisjon+1];
+        let resultat = valutaVerdi*belop;
+        utData +=belop +" "+valuta+" blir "+resultat+" kr.";
+      }
+      else
+      {
+        utData+="Feil i valuta, må bruke USD eller EUR";
+      }
+      document.getElementById("utData").innerHTML=utData;
+    }
+
+    function velgForfatter(){
+      const forfatter = document.getElementById("forfatter").value;
+      switch (forfatter){
+        case "Nesbø" :{
+          let ut="Tørst<input type='checkbox' name='boker' value='Tørst'/><br>";
+          ut+="Snømannen<input type='checkbox' name='boker' value='Snømannen'/><br>";
+          ut+="<button onclick='velgBoker()'>Velg bøker</button>";
+          document.getElementById("velgBoker").innerHTML=ut;
+        }
+          break;
+        case "Horst":{
+          let ut="Bunnfall<input type='checkbox' name='boker' value='Bunnfall'/><br>";
+          ut+="Blindgang<input type='checkbox' name='boker' value='Blindgang'/><br>";
+          ut+="<button onclick='velgBoker()'>Velg bøker</button>";
+          document.getElementById("velgBoker").innerHTML=ut;
+        }
+          break;
+        default: document.getElementById("velgBoker").innerText="Må velge forfatter!";
+          break;
+      }
+    }
+    function velgBoker(){
+      let ut="Bøkene valgt er : <br/>";
+      const bokene = document.getElementsByName("boker");
+
+      // feilen fra forelesningen var følgende:
+      // brukte 'in', ikke 'of' i for-løkken nedenfor
+      for (let bok of bokene){
+        if(bok.checked) {
+          ut += bok.value + " ";
+        }
+      }
+      document.getElementById("valg").innerHTML=ut;
+    }
+
+  </script>
+</head>
+<body>
+<div>
+  <table>
+    <tr>
+      <td>Navn</td><td><input type="text" id="navn"/></td>
+    </tr>
+    <tr>
+      <td>Høyde (m)</td><td><input type="text" id="hoyde"/></td>
+    </tr>
+    <tr>
+      <td>Vekt</td><td><input type="text" id="vekt"/></td>
+    </tr>
+    <tr>
+      <td><button value="Beregn BMI" onclick="beregnBMI()">Beregn BMI</button></td>
+    </tr>
+  </table>
+  <div id="bmi"></div>
+</div>
+
+<div>
+  <h2>Valutakalkulator</h2>
+  <table>
+    <tr>
+      <td>Skriv inn beløp i utenlandsk valuta</td>
+      <td><input type="text" id="verdiID"/></td>
+    </tr>
+    <tr>
+      <td>Skriv inn type valuta (USD eller EUR)</td>
+      <td><input type="text" id="valutaID"/></td>
+    </tr>
+  </table>
+  <button onclick="beregnValuta();">Beregn kr</button>
+  <div id="utData"></div>
+
+  <div id="feilmelding"></div>
+</div>
+
+<div>
+  <h3>Kjøp bøker</h3>
+  <select id="forfatter" onchange="velgForfatter()">
+    <option>-----</option>
+    <option>Nesbø</option>
+    <option>Horst</option>
+  </select>
+  <div id="velgBoker"></div>
+  <div id="valg"></div>
+</div>
+</body>
+</html>

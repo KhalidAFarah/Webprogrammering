@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Javascript 2</title>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <table >
+        <tr>
+            <th style="text-align:start">Navn</th>
+            <td><input type="text" id="navn"/></td>
+        </tr>
+        <tr>
+            <th style="text-align:start">Adresse</th>
+            <td><input type="text" id="adresse"/></td>
+        </tr>
+        <tr>
+            <th style="text-align:start">Telefonnr</th>
+            <td><input type="text" id="tlf"/></td>
+        </tr>
+        <tr>
+            <th style="text-align:start">Fødselsnummer</th>
+            <td><input type="text" id="fødselsnummer"/></td>
+        </tr>
+    </table>
+    <button onclick="registrer()">Registrer</button>
+    <button onclick="visPersonRegister()">vis personregister</button>
+    <div id="personRegister"></div>
+</body>
+</html>

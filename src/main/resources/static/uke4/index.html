@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JQuery</title>
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function (){
+            $("#visNavnOgAlder").click(function () {
+                let navn = $("#navn").val();
+                let alder = $("#alder").val();
+
+                if(isNaN(alder) || alder <= 0){
+                    alert("Alder må ha en gyldig verdi og være større enn 0");
+                }else{
+                    console.log("Navn: " + navn + ", Alder: " + alder);
+                    alert("Navn: " + $("#navn").val() + ", Alder: " + $("#alder").val());
+                }
+            });
+
+            $("#konverter").click(function () {
+                let celcius = $("#celcius");
+                let fahrenheit = $("#fahrenheit");
+
+                if(isNaN(celcius.val()) || celcius.val() != ""){
+                    fahrenheit.val(((9/5)*celcius.val()+32).toFixed(2))
+                }else if(isNaN(fahrenheit.val()) ||fahrenheit.val() != ""){
+                    celcius.val(((5/9)*(fahrenheit.val()-32)).toFixed(2))
+                }
+            });
+
+            $("#plus").click(function () {
+                const x = Number($("#x").val());
+                const y = Number($("#y").val());
+                if(isNaN(x) && isNaN(y)){
+                    const res = x + y;
+                    $("#res").html("<h3>" + res + "</h3>");
+                }else{
+                    alert("Vennligst oppgi gyldig informasjon for x og y!");
+                }
+            });
+            $("#minus").click(function () {
+                const x = Number($("#x").val());
+                const y = Number($("#y").val());
+                if(isNaN(x) && isNaN(y)){
+                    const res = x - y;
+                    $("#res").html("<h3>" + res + "</h3>");
+                }else{
+                    alert("Vennligst oppgi gyldig informasjon for x og y!");
+                }
+            });
+            $("#multi").click(function () {
+                const x = Number($("#x").val());
+                const y = Number($("#y").val());
+                if(isNaN(x) && isNaN(y)){
+                    const res = x * y;
+                    $("#res").html("<h3>" + res + "</h3>");
+                }else{
+                    alert("Vennligst oppgi gyldig informasjon for x og y!");
+                }
+            });
+            $("#dele").click(function () {
+                const x = Number($("#x").val());
+                const y = Number($("#y").val());
+                if(isNaN(x) && isNaN(y)){
+                    const res = x / y;
+                    $("#res").html("<h3>" + res + "</h3>");
+                }else{
+                    alert("Vennligst oppgi gyldig informasjon for x og y!");
+                }
+            });
+
+            const personRegister = [];
+            let ut = "";
+
+            const person1 = {
+                navn: "Line Jensen",
+                adresse: "Askerveien 82",
+                telefonnr: "123456789",
+                fødselsnummer: "11111111111"
+            };
+            const person2 = {
+                navn: "Ole Hansen",
+                adresse: "Osloveien 82",
+                telefonnr: "99887766",
+                fødselsnummer: "22222222222"
+            };
+
+            const person3 = {
+                navn: "Peter Pettersen",
+                adresse: "Osloveien 42",
+                telefonnr: "55443322",
+                fødselsnummer: "33333333333"
+            };
+
+            const person4 = {
+                navn: "Chris Lee",
+                adresse: "Klokkevei 1000",
+                telefonnr: "11223344",
+                fødselsnummer: "44444444444"
+            };
+
+            personRegister.push(person1);
+            personRegister.push(person2);
+            personRegister.push(person3);
+            personRegister.push(person4);
+
+            function visPersonRegister(){
+                ut = "<table><tr>" +
+                    "<th>Navn</th><th>Adresse</th><th>Telefonnr</th><th>Fødselsnr</th>" +
+                    "</tr>";
+                for(let i in personRegister){
+                    if(i % 2 == 0){
+                        ut += "<tr>" +
+                            "<td><strong>"+personRegister[i].navn+"</strong></td><td><strong>"+personRegister[i].adresse+"</strong</td><td><strong>"+personRegister[i].telefonnr+"</strong></td><td><strong>"+personRegister[i].fødselsnummer+"</strong></td>" +
+                            "</tr>";
+                    }else{
+
+                        let kjønn = personRegister[i].fødselsnummer.split("")[10];
+                        kjønn = parseInt(kjønn);
+                        if(kjønn % 2 == 0){
+                            ut += "<tr>" +
+                                "<td>"+personRegister[i].navn+"</td><td>"+personRegister[i].adresse+"</td><td>"+personRegister[i].telefonnr+"</td><td>"+personRegister[i].fødselsnummer+"</td>" +
+                                "</tr>";
+                        }else{
+                            ut += "<tr>" +
+                                "<td><strong>"+personRegister[i].navn+"</strong></td><td><strong>"+personRegister[i].adresse+"</strong</td><td><strong>"+personRegister[i].telefonnr+"</strong></td><td><strong>"+personRegister[i].fødselsnummer+"</strong></td>" +
+                                "</tr>";
+                        }
+
+                    }
+                }
+                ut += "<table/>";
+                $("#personRegister").html(ut);
+
+                $("#personRegister").html($("#personRegister").html() + "</br>")
+                ut = "<table><tr>" +
+                    "<th>Navn</th><th>Adresse</th><th>Telefonnr</th><th>Fødselsnr</th>" +
+                    "</tr>";
+
+                personRegister.sort((person1, person2) => {
+                    const navn1 = person1.navn.toLowerCase();
+                    const navn2 = person2.navn.toLowerCase();
+
+                    if(navn1 > navn2){
+                        return 1;
+                    }else if(navn1 < navn2){
+                        return -1;
+                    }else{
+                        return 0;
+                    }
+
+                })
+                for(let i in personRegister){
+                    if(i % 2 == 0){
+                        ut += "<tr>" +
+                            "<td><strong>"+personRegister[i].navn+"</strong></td><td><strong>"+personRegister[i].adresse+"</strong</td><td><strong>"+personRegister[i].telefonnr+"</strong></td><td><strong>"+personRegister[i].fødselsnummer+"</strong></td>" +
+                            "</tr>";
+                    }else{
+
+                        let kjønn = personRegister[i].fødselsnummer.split("")[10];
+                        kjønn = parseInt(kjønn);
+                        if(kjønn % 2 == 0){
+                            ut += "<tr>" +
+                                "<td>"+personRegister[i].navn+"</td><td>"+personRegister[i].adresse+"</td><td>"+personRegister[i].telefonnr+"</td><td>"+personRegister[i].fødselsnummer+"</td>" +
+                                "</tr>";
+                        }else{
+                            ut += "<tr>" +
+                                "<td><strong>"+personRegister[i].navn+"</strong></td><td><strong>"+personRegister[i].adresse+"</strong</td><td><strong>"+personRegister[i].telefonnr+"</strong></td><td><strong>"+personRegister[i].fødselsnummer+"</strong></td>" +
+                                "</tr>";
+                        }
+
+                    }
+                }
+                ut +="<table/>";
+                $("#personRegister").html($("#personRegister").html() + ut);
+            }
+            $("#knapp-visRegister").click(visPersonRegister)
+            $("#knapp-registrer").click(function () {
+                const navn = $("#navn-register").val();
+                const adresse = $("#adresse-register").val();
+                const tlf = $("#tlf-register").val();
+                const fødselsnummer = $("#fødselsnummer-register").val();
+
+                const person = {
+                    navn: navn,
+                    adresse: adresse,
+                    telefonnr: tlf,
+                    fødselsnummer: fødselsnummer,
+                };
+
+                personRegister.push(person);
+                visPersonRegister();
+            });
+            let id = 0;
+            $("#leggTilGjoremal").change(function (e){
+                const mal = e.target.value;
+                const liste = $("#listeAvGjoremal");
+                liste.append("<div name='ma' id="+id+">"+id + " : "+mal+"</div>");
+                const input = $("#"+id).append("<input type='checkbox' name='mal' value="+id+"/>");
+                input.click(function () {
+                    this.style="text-decoration: line-through;";
+                    $("#listeAvGjortemal").append(this)
+                })
+                id++;
+            });
+
+            const oppgaver = [];
+
+            const oppgave1 = {
+                sporsmol: "Når er frist for oblig 1?",
+                alternativer: ['1. Februar', '6. Februar', '12. Februar'],
+                riktigIndex: 2
+            };
+
+            const oppgave2 = {
+                sporsmol: "Hvor mange obliger er det i dette faget?",
+                alternativer: ['3', '5', 'ingen', '2'],
+                riktigIndex: 0
+            };
+
+            const oppgave3 = {
+                sporsmol: "Hva står API for?",
+                alternativer: ['App Program Instruction', 'Application Programming Interface', 'Det er ikke en forkortelse'],
+                riktigIndex: 1
+            };
+
+            oppgaver.push(oppgave1);
+            oppgaver.push(oppgave2);
+            oppgaver.push(oppgave3);
+
+            $("#knapp-skrivUtOppgaver").click(function (){
+                const liste = $('#liste');
+                let utskrift = "";
+                for(let i = 0; i < oppgaver.length; i++){
+                    liste.append("<li>"+oppgaver[i].sporsmol+"</li>");
+
+                    for(let j = 0; j < oppgaver[i].alternativer.length; j++){
+                        liste.append(oppgaver[i].alternativer[j]+"<input name=oppgave-"+i+" type='radio'/><br />");
+                    }
+                }
+                liste.append("<br /><button id='sjekkSvar'>Sjekk svar</button>");
+
+                $("#sjekkSvar").click(function (){
+                    let sum = 0;
+                    for(let i = 0; i < oppgaver.length; i++){
+                        const queryVal = "oppgave-"+i;
+                        const query = $("input:radio[name="+queryVal+"]");
+                        query.each(function (index, element) {
+
+                            if(element.checked && oppgaver[i].riktigIndex == index){
+                                sum++;
+                            }
+                        });
+                    }
+                    alert("svart "+sum+"/"+oppgaver.length+" riktig");
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+<input type="text" id="navn" placeholder="Navn"/>
+<input type="number" id="alder" placeholder="Alder"/>
+<button id="visNavnOgAlder">Knapp</button>
+
+<br />
+<br />
+
+<input type="number" id="celcius" placeholder="Celcius"/>
+<input type="number" id="fahrenheit" placeholder="Fahrenheit"/>
+<button id="konverter">Konverter</button>
+
+<br />
+<br />
+
+<input type="number" id="x" placeholder="x"/>
+<input type="number" id="y" placeholder="y"/>
+<br/>
+<button id="plus">+</button>
+<button id="minus">-</button>
+<button id="multi">*</button>
+<button id="dele">/</button>
+<div id="res"></div>
+
+<br />
+<br />
+
+<table >
+    <tr>
+        <th style="text-align:start">Navn</th>
+        <td><input type="text" id="navn-register"/></td>
+    </tr>
+    <tr>
+        <th style="text-align:start">Adresse</th>
+        <td><input type="text" id="adresse-register"/></td>
+    </tr>
+    <tr>
+        <th style="text-align:start">Telefonnr</th>
+        <td><input type="text" id="tlf-register"/></td>
+    </tr>
+    <tr>
+        <th style="text-align:start">Fødselsnummer</th>
+        <td><input type="text" id="fødselsnummer-register"/></td>
+    </tr>
+</table>
+<button id="knapp-registrer">Registrer</button>
+<button id="knapp-visRegister">vis personregister</button>
+<div id="personRegister"></div>
+
+<br><br>
+
+<input placeholder="Gjoremal" type="text" id="leggTilGjoremal"/>
+<div id="listeAvGjoremal"></div>
+<div id="listeAvGjortemal"></div>
+
+<button id="knapp-skrivUtOppgaver" >Ta test!</button>
+<ul id="liste"></ul>
+
+
+</body>
+</html>
